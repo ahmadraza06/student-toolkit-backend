@@ -2,6 +2,29 @@
 const mongoose = require("mongoose");
 const Resume = require("../models/Resume");
 
+const allowedFields = [
+  "title",
+  "personalInfo",
+  "education",
+  "skills",
+  "projects",
+  "experience",
+];
+
+const sanitizeResumeData = (data) => {
+  const cleanData = {};
+
+  for (const field of allowedFields) {
+    if (data[field] !== undefined) {
+      cleanData[field] = data[field];
+    }
+  }
+
+  return cleanData;
+};
+
+
+
 function createError(message, statusCode) {
   const error = new Error(message);
   error.statusCode = statusCode;
@@ -42,13 +65,13 @@ async function getResumeById(userId, resumeId) {
 
 async function updateResume(userId, resumeId, data) {
   validateResumeId(resumeId);
-
+  const updateData = sanitizeResumeData(data);
   const resume = await Resume.findOneAndUpdate(
     {
       _id: resumeId,
       userId,
     },
-    { $set: data },
+    { $set: updateData },
     {
       new: true,
       runValidators: true,

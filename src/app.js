@@ -7,6 +7,8 @@ const resumeRoutes = require("./routes/resume.routes");
 const timetableRoutes = require(
   "./routes/timetable.routes"
 );
+const adminRoutes = require("./routes/admin.routes")
+
 const {authLimiter,apiLimiter} = require("./middlewares/rateLimiter")
 const helmet = require("helmet");
 
@@ -52,7 +54,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth",authRoutes);
 app.use("/api/resumes",resumeRoutes);
 app.use("/api/timetables", timetableRoutes);
-
+app.use("/api/admin",adminRoutes)
 
 app.use(notFound);
 app.use(errorHandler);
